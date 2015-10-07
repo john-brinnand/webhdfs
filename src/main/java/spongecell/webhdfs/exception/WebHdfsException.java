@@ -1,4 +1,4 @@
-package webhdfs.dataloader.exception;
+package spongecell.webhdfs.exception;
 
 public class WebHdfsException extends RuntimeException {
 

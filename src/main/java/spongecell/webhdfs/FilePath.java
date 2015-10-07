@@ -1,4 +1,4 @@
-package webhdfs.dataloader;
+package spongecell.webhdfs;
 
 import java.io.File;
 

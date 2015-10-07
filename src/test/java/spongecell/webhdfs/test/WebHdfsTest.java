@@ -1,4 +1,4 @@
-package webhdfs.dataloader.test;
+package spongecell.webhdfs.test;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,10 +26,10 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import webhdfs.dataloader.WebHdfs;
-import webhdfs.dataloader.WebHdfsConfiguration;
-import webhdfs.dataloader.WebHdfsParams;
-import webhdfs.dataloader.exception.WebHdfsException;
+import spongecell.webhdfs.WebHdfs;
+import spongecell.webhdfs.WebHdfsConfiguration;
+import spongecell.webhdfs.WebHdfsParams;
+import spongecell.webhdfs.exception.WebHdfsException;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import static webhdfs.dataloader.WebHdfsParams.*;
+import static spongecell.webhdfs.WebHdfsParams.*;
 
 /**
  * @author jbrinnand

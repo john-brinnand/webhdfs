@@ -1,4 +1,4 @@
-package webhdfs.dataloader.test;
+package spongecell.webhdfs.test;
 
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
@@ -35,10 +35,10 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import webhdfs.dataloader.FilePath;
-import webhdfs.dataloader.WebHdfsConfiguration;
-import webhdfs.dataloader.WebHdfsOps;
-import webhdfs.dataloader.WebHdfsWorkFlow;
+import spongecell.webhdfs.FilePath;
+import spongecell.webhdfs.WebHdfsConfiguration;
+import spongecell.webhdfs.WebHdfsOps;
+import spongecell.webhdfs.WebHdfsWorkFlow;
 
 @Slf4j
 @ContextConfiguration(classes = { WebHdfsWorkFlowTest.class, WebHdfsWorkFlow.Builder.class})

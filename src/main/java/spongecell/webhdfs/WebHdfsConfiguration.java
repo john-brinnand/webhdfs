@@ -1,4 +1,4 @@
-package webhdfs.dataloader;
+package spongecell.webhdfs;
 
 import lombok.Getter;
 import lombok.Setter;

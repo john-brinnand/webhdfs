@@ -1,4 +1,4 @@
-package webhdfs.dataloader;
+package spongecell.webhdfs;
 
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;

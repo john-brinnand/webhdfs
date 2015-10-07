@@ -1,4 +1,4 @@
-package webhdfs.dataloader;
+package spongecell.webhdfs;
 
 public enum WebHdfsOps {
 	CREATE("CREATE"),

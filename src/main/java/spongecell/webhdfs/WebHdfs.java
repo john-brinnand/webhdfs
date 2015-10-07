@@ -1,4 +1,4 @@
-package webhdfs.dataloader;
+package spongecell.webhdfs;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,13 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.util.Assert;
 
+import spongecell.webhdfs.WebHdfsWorkFlow.Builder;
+import spongecell.webhdfs.exception.WebHdfsException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import webhdfs.dataloader.WebHdfsWorkFlow.Builder;
-import webhdfs.dataloader.exception.WebHdfsException;
-import static webhdfs.dataloader.WebHdfsParams.*;
+import static spongecell.webhdfs.WebHdfsParams.*;
 
 
 @Slf4j
