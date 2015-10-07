@@ -1,2 +1,3 @@
-# webhdfs-dataloader
-A data loader that extracts data from Kafka and loads it into HDFS using WebHdfs.  # webhdfs
+# webhdfs
+A Library that implements the WebHDFS REST Api.
+`
