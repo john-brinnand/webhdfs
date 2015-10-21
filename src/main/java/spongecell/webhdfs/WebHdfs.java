@@ -226,7 +226,7 @@ public class WebHdfs {
 					"Response code indicates a failed write");	
 			
 		} catch (URISyntaxException | IOException e) {
-			log.error("ERROR -  ");
+			log.error("ERROR - {} ", e);
 		}
 		log.info("Returning http response. Status code is: {}", 
 			response.getStatusLine().getStatusCode());
