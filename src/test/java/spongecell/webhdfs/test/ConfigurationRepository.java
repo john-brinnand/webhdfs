@@ -83,4 +83,10 @@ public class ConfigurationRepository {
 	public WebHdfsConfiguration buildWebHdfsConfiguration() {
 		return new WebHdfsConfiguration();
 	}	
+	
+	@Bean(name="webhdfs")
+	@ConfigurationProperties(prefix="webhdfs")
+	public WebHdfsConfiguration buildWebHdfsConfig() {
+		return new WebHdfsConfiguration();
+	}	
 }

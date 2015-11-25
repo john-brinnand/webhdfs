@@ -39,7 +39,7 @@ public class WebHdfsWorkFlow {
 	}
 
 	@EnableConfigurationProperties ({ WebHdfs.Builder.class })
-	public static class Builder extends GenericBuilder<WebHdfsWorkFlow>{
+	public static class Builder extends GenericBuilder<WebHdfsWorkFlow> {
 		@Autowired WebHdfs.Builder webHdfsBuilder;
 		private String fileName;
 		private String user;
@@ -106,6 +106,10 @@ public class WebHdfsWorkFlow {
 		}
 	}
 	
+	public WebHdfsConfiguration getConfig() {
+		return webHdfs.getWebHdfsConfig();
+	}
+	
 	public CloseableHttpResponse execute() throws URISyntaxException {
 		CloseableHttpResponse response = null;
 		WebHdfsOpsArgs opsArgs =  null;
@@ -141,9 +145,8 @@ public class WebHdfsWorkFlow {
 				continue;
 			}		
 			if (opsArgs.getWebHdfsOp().equals(WebHdfsOps.SETOWNER)) {
-				response = webHdfs.setOwner((String)opsArgs.getArgs()[0], 
-						(String)opsArgs.getArgs()[1], 
-						(String)opsArgs.getArgs()[2]); 
+				response = webHdfs.setOwner((String)opsArgs.getArgs()[0],
+						getConfig().getOwner(), getConfig().getGroup());
 				continue;
 			}					
 		}

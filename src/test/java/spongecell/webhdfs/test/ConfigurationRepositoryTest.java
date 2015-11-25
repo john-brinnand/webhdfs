@@ -103,12 +103,36 @@ public class ConfigurationRepositoryTest extends AbstractTestNGSpringContextTest
 		Assert.assertEquals(webHdfsWorkFlow.getWebHdfs().getWebHdfsConfig()
 				.getBaseDir(), baseDir);
 	}	
+	
 	/**
 	 * Note: in the test below. Step two is
 	 * AgentB which is configured by AgentA.
 	 */
 	@Test
 	public void validateAgentBuilders() {
+		final String agentAStep1Name = "one";
+		final String agentCStep1Name = "three";
+		ConfigurationRepository repo = ctx.getBean(ConfigurationRepository.class); 
+		final String[] agentIds = {"agentA", "agentC"};
+		
+		Agent agentStep1 = (Agent) ctx.getBean(agentIds[0], repo);
+		Assert.assertEquals(
+			(agentStep1.<AgentConfiguration> getConfiguration()).getName(),
+			agentAStep1Name);
+		
+		Agent agentStep3 = (Agent) ctx.getBean(agentIds[1], repo);
+		Assert.assertEquals(
+			(agentStep3.<AgentConfiguration> getConfiguration()).getName(),
+			agentCStep1Name);
+	}	
+	
+	/**
+	 * Note: in the test below. Step two is
+	 * AgentB which is configured by AgentA.
+	 */
+	@Test
+	public void validateAgentBuilderWorkflow() {
+		
 		final String agentAStep1Name = "one";
 		final String agentCStep1Name = "three";
 		ConfigurationRepository repo = ctx.getBean(ConfigurationRepository.class); 
