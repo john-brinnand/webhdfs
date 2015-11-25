@@ -93,14 +93,4 @@ public class WebHdfsWorkFlowTest extends AbstractTestNGSpringContextTests{
 		Assert.assertNotNull(response);
 		Assert.assertEquals(response.getStatusLine().getStatusCode(), HttpStatus.OK.value());
 	}		
-	@Test
-	public void iterationTest () {
-		AtomicLong time = new AtomicLong();
-		Long next = time.incrementAndGet();
-		log.info(":{}", String.format("%04d", next));
-		next = time.incrementAndGet();
-		log.info(":{}", String.format("%04d", next));
-		next = time.incrementAndGet();
-		log.info(":{}", String.format("%04d", next));
-	}
 }

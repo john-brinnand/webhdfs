@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.Header;
@@ -38,7 +39,7 @@ import static spongecell.webhdfs.WebHdfsParams.*;
 
 
 @Slf4j
-@Getter
+@Getter @Setter
 public class WebHdfs {
 	private WebHdfsConfiguration webHdfsConfig;
 	private CloseableHttpClient httpClient;
@@ -67,7 +68,7 @@ public class WebHdfs {
 
 	@EnableConfigurationProperties ({ WebHdfsConfiguration.class })
 	public static class Builder {
-		@Autowired WebHdfsConfiguration webHdfsConfig;
+		private WebHdfsConfiguration webHdfsConfig;
 		private String fileName;
 		private String path;
 		private String user;
@@ -96,6 +97,11 @@ public class WebHdfs {
 			this.path = path;
 			return this;
 		}	
+		
+		public Builder config (WebHdfsConfiguration webHdfsConfig) {
+			this.webHdfsConfig = webHdfsConfig;
+			return this;
+		}
 		
 		public WebHdfs build () {
 			return new WebHdfs(this);

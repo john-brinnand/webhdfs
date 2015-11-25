@@ -1,6 +1,7 @@
 package spongecell.webhdfs;
 
 import java.net.URISyntaxException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,8 +15,11 @@ import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+
+import spongecell.webhdfs.test.GenericBuilder;
 
 @Slf4j
 @Getter
@@ -26,6 +30,7 @@ public class WebHdfsWorkFlow {
 	private WebHdfsWorkFlow(Builder builder) {
 		this.workFlow = builder.workFlow;
 		webHdfs = builder.webHdfsBuilder
+			.config(builder.config)
 			.path(builder.path)
 			.fileName(builder.fileName)
 			.user(builder.user)
@@ -34,13 +39,17 @@ public class WebHdfsWorkFlow {
 	}
 
 	@EnableConfigurationProperties ({ WebHdfs.Builder.class })
-	public static class Builder {
+	public static class Builder extends GenericBuilder<WebHdfsWorkFlow>{
 		@Autowired WebHdfs.Builder webHdfsBuilder;
 		private String fileName;
 		private String user;
 		private String overwrite;
 		private String path; 
 		private Map<String, WebHdfsOpsArgs> workFlow;
+		private WebHdfsConfiguration config;
+		private Iterator<String> iter;
+		private ApplicationContext ctx;
+		private String elementId; 
 
 		public Builder() {
 			workFlow = new LinkedHashMap<String, WebHdfsOpsArgs>();
@@ -73,10 +82,30 @@ public class WebHdfsWorkFlow {
 			return this;
 		}	
 		
+		@Override
+		public Builder context(ApplicationContext ctx) {
+			this.ctx = ctx;
+			return this;
+		}
+
+		@Override
+		public Builder repoId(String repoId) {
+			this.elementId = repoId;
+			return this;
+		}
+
+		@Override
+		public Builder agentIterator(Iterator<String> iter) {
+			this.iter = iter;
+			return this;
+		}	
+		
 		public WebHdfsWorkFlow build() {
+			this.config = (WebHdfsConfiguration) ctx.getBean(elementId);
 			return new WebHdfsWorkFlow(this);
 		}
 	}
+	
 	public CloseableHttpResponse execute() throws URISyntaxException {
 		CloseableHttpResponse response = null;
 		WebHdfsOpsArgs opsArgs =  null;
@@ -120,5 +149,4 @@ public class WebHdfsWorkFlow {
 		}
 		return response;
 	}	
-		
 }
