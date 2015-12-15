@@ -11,6 +11,7 @@ public class WebHdfsParams {
 	public final static String GETCONTENTSUMMARY = "GETCONTENTSUMMARY";
 	public final static String MKDIRS = "MKDIRS";
 	public final static String SETOWNER = "SETOWNER";
+	public final static String OPEN = "OPEN";
 	public final static String OWNER = "owner";
 	public final static String GROUP = "group";
 	public final static String OP = "op";

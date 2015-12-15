@@ -1,5 +1,23 @@
 package spongecell.webhdfs;
 
+import static spongecell.webhdfs.WebHdfsParams.APPEND;
+import static spongecell.webhdfs.WebHdfsParams.CREATE;
+import static spongecell.webhdfs.WebHdfsParams.DEFAULT_PERMISSIONS;
+import static spongecell.webhdfs.WebHdfsParams.GETCONTENTSUMMARY;
+import static spongecell.webhdfs.WebHdfsParams.GETFILESTATUS;
+import static spongecell.webhdfs.WebHdfsParams.GROUP;
+import static spongecell.webhdfs.WebHdfsParams.LISTSTATUS;
+import static spongecell.webhdfs.WebHdfsParams.LOCATION;
+import static spongecell.webhdfs.WebHdfsParams.MKDIRS;
+import static spongecell.webhdfs.WebHdfsParams.OP;
+import static spongecell.webhdfs.WebHdfsParams.OVERWRITE;
+import static spongecell.webhdfs.WebHdfsParams.OWNER;
+import static spongecell.webhdfs.WebHdfsParams.PERMISSION;
+import static spongecell.webhdfs.WebHdfsParams.SETOWNER;
+import static spongecell.webhdfs.WebHdfsParams.USER;
+import static spongecell.webhdfs.WebHdfsParams.USERNAME;
+import static spongecell.webhdfs.WebHdfsParams.OPEN;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,18 +42,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.util.Assert;
 
-import spongecell.webhdfs.WebHdfsWorkFlow.Builder;
 import spongecell.webhdfs.exception.WebHdfsException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import static spongecell.webhdfs.WebHdfsParams.*;
 
 
 @Slf4j
@@ -219,7 +233,7 @@ public class WebHdfs {
 				.setPort(webHdfsConfig.getPort())
 				.setPath(webHdfsConfig.getWEBHDFS_PREFIX()
 						+ webHdfsConfig.getPath() + "/" 
-						+ webHdfsConfig.getFileName())
+						+ fileName)
 				.setParameter(USERNAME, webHdfsConfig.getUser())
 				.setParameter(OP, GETFILESTATUS)				
 				.setParameter(OVERWRITE, "false")
@@ -411,6 +425,41 @@ public class WebHdfs {
 		}
 		return response;
 	}	
+	/**
+	 * curl -i -L "http://<HOST>:<PORT>/webhdfs/v1/<PATH>?op=OPEN
+                    [&offset=<LONG>][&length=<LONG>][&buffersize=<INT>]"
+	 * @param fileName
+	 * @return
+	 */
+	public CloseableHttpResponse openRead (String fileName) {
+		log.info("Opening {} ", webHdfsConfig.getPath() + "/" + fileName);
+		String absolutePath  = webHdfsConfig.getPath() + "/" + fileName;
+		CloseableHttpResponse response = null; 
+		try {
+			final URI uri = new URIBuilder()
+				.setScheme(webHdfsConfig.getScheme())
+				.setHost(webHdfsConfig.getHost())
+				.setPort(webHdfsConfig.getPort())
+				.setPath(webHdfsConfig.getWEBHDFS_PREFIX() + absolutePath)
+				.setParameter(USERNAME, webHdfsConfig.getUser())
+				.setParameter(OP, OPEN)	
+				.build();
+			
+			HttpGet httpMethod = new HttpGet(uri);
+			response = httpClient.execute(httpMethod);
+			Assert.notNull(response);
+			Assert.isTrue(response.getStatusLine().getStatusCode() == 404 || 
+				response.getStatusLine().getStatusCode() == 200, 
+				"Response code indicates a failed read from : " + 
+				uri.toString() + "Status code is: " + 
+				response.getStatusLine().getStatusCode());			
+		} catch (URISyntaxException | IOException | IllegalArgumentException e) {
+			log.error("ERROR - LISTSTATUS failed with exception: {} ", e);
+		}
+		log.info("Returning http response. Status code is: {}", 
+			response.getStatusLine().getStatusCode());
+		return response;
+	}
 	
 	/**
 	 * Write utility.

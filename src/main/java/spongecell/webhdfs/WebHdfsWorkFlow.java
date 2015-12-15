@@ -19,10 +19,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
-import spongecell.webhdfs.test.GenericBuilder;
+import spongecell.webhdfs.builder.GenericBuilder;
+
+
 
 @Slf4j
 @Getter
+@EnableConfigurationProperties({ 
+	GenericBuilder.class, 
+	WebHdfs.Builder.class 
+})
 public class WebHdfsWorkFlow {
 	private Map<String, WebHdfsOpsArgs> workFlow;
 	private @Autowired WebHdfs webHdfs;
@@ -38,7 +44,7 @@ public class WebHdfsWorkFlow {
 			.build();
 	}
 
-	@EnableConfigurationProperties ({ WebHdfs.Builder.class })
+	@EnableConfigurationProperties ({ WebHdfs.Builder.class, WebHdfsConfiguration.class })
 	public static class Builder extends GenericBuilder<WebHdfsWorkFlow> {
 		@Autowired WebHdfs.Builder webHdfsBuilder;
 		private String fileName;
@@ -54,6 +60,11 @@ public class WebHdfsWorkFlow {
 		public Builder() {
 			workFlow = new LinkedHashMap<String, WebHdfsOpsArgs>();
 		}
+		
+		public Builder clear() {
+			this.workFlow.clear();
+			return this;
+		} 
 		
 		public Builder addEntry(String step, WebHdfsOps ops, 
 				HttpStatus httpStatus, Object...args) {
@@ -82,6 +93,12 @@ public class WebHdfsWorkFlow {
 			return this;
 		}	
 		
+		public Builder config(WebHdfsConfiguration config) {
+			this.config = config;
+			return this;
+		}	
+		
+		
 		@Override
 		public Builder context(ApplicationContext ctx) {
 			this.ctx = ctx;
@@ -89,19 +106,21 @@ public class WebHdfsWorkFlow {
 		}
 
 		@Override
-		public Builder repoId(String repoId) {
-			this.elementId = repoId;
+		public Builder repoId(String elementId) {
+			this.elementId = elementId;
 			return this;
 		}
 
-		@Override
 		public Builder agentIterator(Iterator<String> iter) {
 			this.iter = iter;
 			return this;
 		}	
 		
 		public WebHdfsWorkFlow build() {
-			this.config = (WebHdfsConfiguration) ctx.getBean(elementId);
+			if (this.config == null) {
+				this.config = (WebHdfsConfiguration) ctx.getBean(elementId);
+			}
+			log.info("WebHdfsConfiguration is: {} ", this.config.toString());
 			return new WebHdfsWorkFlow(this);
 		}
 	}
@@ -149,6 +168,10 @@ public class WebHdfsWorkFlow {
 						getConfig().getOwner(), getConfig().getGroup());
 				continue;
 			}					
+			if (opsArgs.getWebHdfsOp().equals(WebHdfsOps.OPENANDREAD)) {
+				response = webHdfs.openRead((String)opsArgs.getArgs()[0]);
+				continue;
+			}		
 		}
 		return response;
 	}	
